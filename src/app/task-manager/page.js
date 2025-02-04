@@ -1,33 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-function Button({ children, onClick }) {
-  return (
-    <button
-      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-
-function Checkbox({ checked, onChange }) {
-  return <input type="checkbox" checked={checked} onChange={onChange} />;
-}
-
-function Input({ type = "text", value, onChange, placeholder }) {
-  return (
-    <input
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className="border p-2 rounded w-full"
-    />
-  );
-}
+import "./TaskManager.css";
 
 export default function TaskManager() {
   const [tasks, setTasks] = useState([]);
@@ -56,27 +30,29 @@ export default function TaskManager() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold">Task Manager</h1>
-      <div className="flex gap-2 my-4">
-        <Input
+    <div className="task-manager">
+      <h1 className="title">Task Manager</h1>
+      <div className="task-inputs">
+        <input
+          type="text"
           placeholder="Title"
           value={newTask.title}
           onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
         />
-        <Input
+        <input
+          type="text"
           placeholder="Description"
           value={newTask.description}
           onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
         />
-        <Input
+        <input
           type="date"
           value={newTask.dueDate}
           onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
         />
-        <Button onClick={addTask}>Add Task</Button>
+        <button className="add-button" onClick={addTask}>Add Task</button>
       </div>
-      <table className="w-full border-collapse border border-gray-300">
+      <table className="task-table">
         <thead>
           <tr>
             <th>Title</th>
@@ -92,7 +68,8 @@ export default function TaskManager() {
               <td>{task.description}</td>
               <td>{task.dueDate}</td>
               <td>
-                <Checkbox
+                <input
+                  type="checkbox"
                   checked={task.completed}
                   onChange={() => {
                     fetch(`/api/tasks/${task._id}`, {

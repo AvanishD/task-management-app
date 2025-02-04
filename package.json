@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tailwind:init": "tailwindcss init -p"
   },
   "dependencies": {
+    "mongodb": "^6.13.0",
     "mongoose": "^8.9.6",
     "next": "15.1.6",
     "react": "^19.0.0",
