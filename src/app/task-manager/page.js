@@ -11,6 +11,7 @@ export default function TaskManager() {
     dueDate: "",
     completed: false,
   });
+  const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
     fetch("/api/tasks")
@@ -29,6 +30,27 @@ export default function TaskManager() {
     setNewTask({ title: "", description: "", dueDate: "", completed: false });
   };
 
+  const updateTask = async (id, updatedFields) => {
+    const res = await fetch(`/api/tasks/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedFields),
+    });
+
+    if (res.ok) {
+      const updatedTask = await res.json();
+      setTasks(tasks.map((task) => (task._id === id ? updatedTask : task)));
+    }
+  };
+
+  const deleteTask = async (id) => {
+    const res = await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+
+    if (res.ok) {
+      setTasks(tasks.filter((task) => task._id !== id));
+    }
+  };
+
   return (
     <div className="task-manager">
       <h1 className="title">Task Manager</h1>
@@ -43,14 +65,18 @@ export default function TaskManager() {
           type="text"
           placeholder="Description"
           value={newTask.description}
-          onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+          onChange={(e) =>
+            setNewTask({ ...newTask, description: e.target.value })
+          }
         />
         <input
           type="date"
           value={newTask.dueDate}
           onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
         />
-        <button className="add-button" onClick={addTask}>Add Task</button>
+        <button className="add-button" onClick={addTask}>
+          Add Task
+        </button>
       </div>
       <table className="task-table">
         <thead>
@@ -59,32 +85,89 @@ export default function TaskManager() {
             <th>Description</th>
             <th>Due Date</th>
             <th>Completed</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {tasks.map((task) => (
             <tr key={task._id}>
-              <td>{task.title}</td>
-              <td>{task.description}</td>
-              <td>{task.dueDate}</td>
+              <td>
+                {editingTask && editingTask._id === task._id ? (
+                  <input
+                    type="text"
+                    value={editingTask.title}
+                    onChange={(e) =>
+                      setEditingTask({ ...editingTask, title: e.target.value })
+                    }
+                  />
+                ) : (
+                  task.title
+                )}
+              </td>
+              <td>
+                {editingTask && editingTask._id === task._id ? (
+                  <input
+                    type="text"
+                    value={editingTask.description}
+                    onChange={(e) =>
+                      setEditingTask({
+                        ...editingTask,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  task.description
+                )}
+              </td>
+              <td>
+                {editingTask && editingTask._id === task._id ? (
+                  <input
+                    type="date"
+                    value={editingTask.dueDate}
+                    onChange={(e) =>
+                      setEditingTask({
+                        ...editingTask,
+                        dueDate: e.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  task.dueDate
+                )}
+              </td>
               <td>
                 <input
                   type="checkbox"
                   checked={task.completed}
-                  onChange={() => {
-                    fetch(`/api/tasks/${task._id}`, {
-                      method: "PUT",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ completed: !task.completed }),
-                    }).then(() => {
-                      setTasks(
-                        tasks.map((t) =>
-                          t._id === task._id ? { ...t, completed: !t.completed } : t
-                        )
-                      );
-                    });
-                  }}
+                  onChange={() =>
+                    updateTask(task._id, { completed: !task.completed })
+                  }
                 />
+              </td>
+
+              <td>
+                {editingTask && editingTask._id === task._id ? (
+                  <button
+                    className="update-button"
+                    onClick={() => updateTask(task._id)}
+                  >
+                    Save
+                  </button>
+                ) : (
+                  <button
+                    className="edit-button"
+                    onClick={() => setEditingTask(task)}
+                  >
+                    Edit
+                  </button>
+                )}
+                <button
+                  className="delete-button"
+                  onClick={() => deleteTask(task._id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

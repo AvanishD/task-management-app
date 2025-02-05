@@ -61,16 +61,52 @@
   }
   
   .task-table tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #000;
+  }
+
+  .task-table tr:nth-child(odd) {
+    background-color: #000;
   }
   
   .task-table tr:hover {
-    background-color: #ddd;
+    background-color: #2fb748;
   }
   
   .task-table input[type="checkbox"] {
     width: 20px;
     height: 20px;
+    cursor: pointer;  
+  }
+
+  .delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
     cursor: pointer;
+    border-radius: 5px;
   }
   
+  .update-button{
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .edit-button{
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .delete-button:hover, .update-button:hover, .edit-button:hover{
+    background-color: darkred;
+  }
