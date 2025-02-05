@@ -1,8 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Setup your pc!!
 
-## Getting Started
+First Run: npm install (To install all the necessary dependencies)
 
-First, run the development server:
+After that run the development server:
 
 ```bash
 npm run dev
@@ -16,21 +16,40 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Make a database named "taskmanager". The mongodb connection URI is mongodb://localhost:27017/taskmanager.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Make sure you have the local mongodb running.  
 
-## Learn More
+For Windows,
+1. Start MongoDB without a configuration file (Default C:\data\db\ path):
+shell - mongod
+2. If the data folder does not exist, create it:
+shell - mkdir C:\data\db
+3. Run MongoDB with a custom path:
+shell - mongod --dbpath "D:\path\to\your\db"
+4. Run MongoDB as a Windows Service:
+shell - net start MongoDB
 
-To learn more about Next.js, take a look at the following resources:
+For macOS,
+1. If installed via Homebrew:
+shell - brew services start mongodb-community
+2. Manually start MongoDB:
+shell - mongod --dbpath /usr/local/var/mongodb
+3. Check MongoDB logs:
+shell - tail -f /usr/local/var/log/mongodb/mongo.log
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For Linux,
+1. Start MongoDB as a service:
+shell - sudo systemctl start mongod
+2. Enable MongoDB to start on boot:
+shell - sudo systemctl enable mongod
+3. Check MongoDB status:
+shell - sudo systemctl status mongod
+4. Start MongoDB manually with a custom path:
+shell - mongod --dbpath /var/lib/mongodb
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Verify if mongodb is running or not,
+Shell - mongo OR mongosh
 
-## Deploy on Vercel
+Once all these steps are done, you are good to add, delete, update and read your tasks on the Task Management App.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -30,21 +30,23 @@ const TaskSchema = new mongoose.Schema({
 const Task = mongoose.models.Task || mongoose.model("Task", TaskSchema);
 
 // PUT: Update a task by ID
-export async function PUT(req, context) {
+export async function PUT(req, { params }) {
   try {
     await connectToDB();
-    
-    const id = context.params.id;
-    const updateData = await req.json();
 
+    const id = params?.id; // Ensure ID is available
+    if (!id) return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
+
+    const updateData = await req.json(); // Extract the updated task data
+
+    // Update the task in MongoDB
     const updatedTask = await Task.findByIdAndUpdate(id, updateData, { new: true });
 
-    if (!updatedTask) {
-      return NextResponse.json({ message: "Task not found" }, { status: 404 });
-    }
+    if (!updatedTask) return NextResponse.json({ error: "Task not found" }, { status: 404 });
 
     return NextResponse.json(updatedTask, { status: 200 });
   } catch (error) {
+    console.error("Error updating task:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
